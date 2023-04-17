@@ -1,4 +1,6 @@
 #include <ostream>
+#include <cmath>
+
 using namespace std;
 
 namespace ariel 
@@ -21,6 +23,11 @@ public:
         this->numerator = 0;
         this->denominator = 1;
     }
+    Fraction(float f){
+        this->numerator = static_cast<int>(f * 1000);
+        this->denominator = 1000;
+        this->reduce();
+    }
     int getNumerator () {
         return this->numerator;
     }
@@ -28,6 +35,11 @@ public:
         return this->denominator;
     }
     void reduce();
+
+    string toString() const{
+        return to_string(this->numerator) + "/" + to_string(this->denominator);
+    }
+    
     Fraction operator+ (Fraction);
     Fraction operator- (Fraction); 
     Fraction operator* (Fraction);
@@ -69,4 +81,5 @@ public:
     friend istream& operator>> (istream &is, Fraction &f);
     friend ostream& operator<< (ostream& os, const Fraction& f);
 };
+
 }

@@ -36,6 +36,9 @@ namespace ariel {
         return result;
     }
     Fraction Fraction::operator/ (Fraction frac){
+        if (frac == Fraction(0,1)){
+           __throw_invalid_argument("Trying to divide by zero!"); 
+        }
         int newNum = this->numerator * frac.getDenominator();
         int newDen = this->denominator * frac.getNumerator();
         Fraction result(newNum,newDen);
@@ -61,39 +64,93 @@ namespace ariel {
         return ((float)this->numerator/(float)this->denominator) >= ((float)frac.getNumerator()/(float)frac.getDenominator());
     }
 
-    Fraction operator+ (float fl,Fraction frac){return frac;}
-    Fraction operator- (float fl,Fraction frac){return frac;} 
-    Fraction operator* (float fl,Fraction frac){return frac;}
-    Fraction operator/ (float fl,Fraction frac){return frac;}
-    bool operator== (float fl,Fraction frac){return false;}
-    bool operator!= (float fl,Fraction frac){return false;}
-    bool operator< (float fl,Fraction frac){return false;}
-    bool operator<= (float fl,Fraction frac){return false;}
-    bool operator> (float fl,Fraction frac){return false;}
-    bool operator>= (float fl,Fraction frac){return false;}
+    Fraction operator+ (float fl,Fraction frac){
+        Fraction f(fl);
+        return (f+frac);
+    }
+    Fraction operator- (float fl,Fraction frac){
+        Fraction f(fl);
+        return (f-frac);
+    } 
+    Fraction operator* (float fl,Fraction frac){
+        Fraction f(fl);
+        return (f*frac);
+    }
+    Fraction operator/ (float fl,Fraction frac){
+        if (frac == Fraction(0,1)){
+           __throw_invalid_argument("Trying to divide by zero!"); 
+        }
+        Fraction f(fl);
+        return (f+frac);
+    }
+    bool operator== (float fl,Fraction frac){
+        Fraction f(fl);
+        return f==frac;
+    }
+    bool operator!= (float fl,Fraction frac){
+        Fraction f(fl);
+        return f!=frac;
+    }
+    bool operator< (float fl,Fraction frac){
+        Fraction f(fl);
+        return f<frac;
+    }
+    bool operator<= (float fl,Fraction frac){
+        Fraction f(fl);
+        return f<=frac;
+    }
+    bool operator> (float fl,Fraction frac){
+        Fraction f(fl);
+        return f>frac;
+    }
+    bool operator>= (float fl,Fraction frac){
+        Fraction f(fl);
+        return f>=frac;
+    }
 
     Fraction Fraction::operator+ (float fl){
-        Fraction a(1,1);
-        return a;
+        Fraction f(fl);
+        return *this + f;
     }
     Fraction Fraction::operator- (float fl){
-        Fraction a(1,1);
-        return a;
+        Fraction f(fl);
+        return *this - f;
     }
     Fraction Fraction::operator* (float fl){
-        Fraction a(1,1);
-        return a;
+        Fraction f(fl);
+        return *this * f;
     }
     Fraction Fraction::operator/ (float fl){
-        Fraction a(1,1);
-        return a;
+        if (fl == 0.0) {
+            __throw_invalid_argument("Trying to divide by zero!"); 
+        }
+        Fraction f(fl);
+        return *this / f;
     }
-    bool Fraction::operator== (float fl){return false;}
-    bool Fraction::operator!= (float fl){return false;}
-    bool Fraction::operator< (float fl){return false;}
-    bool Fraction::operator<= (float fl){return false;}
-    bool Fraction::operator> (float fl){return false;}
-    bool Fraction::operator>= (float fl){return false;}
+    bool Fraction::operator== (float fl){
+        Fraction f(fl);
+        return *this == f;
+    }
+    bool Fraction::operator!= (float fl){
+        Fraction f(fl);
+        return *this != f;
+    }
+    bool Fraction::operator< (float fl){
+        Fraction f(fl);
+        return *this < f;
+    }
+    bool Fraction::operator<= (float fl){
+        Fraction f(fl);
+        return *this <= f;
+    }
+    bool Fraction::operator> (float fl){
+        Fraction f(fl);
+        return *this > f;
+    }
+    bool Fraction::operator>= (float fl){
+        Fraction f(fl);
+        return *this >= f;
+    }
 
     Fraction Fraction::operator++ (){
         this->numerator+=this->denominator;
@@ -116,8 +173,18 @@ namespace ariel {
         return *this;
     }
 
-    istream& operator>> (istream &is, Fraction &f){ return is;}
-    ostream& operator<< (ostream& os, const Fraction& f){return os;}
+    istream& operator>> (istream &is, Fraction &frac){ 
+        int num;
+        int den;
+        is >> num >> den;
+        frac = Fraction(num, den);
+        return is;
+    }
+
+    ostream& operator<< (ostream& os, const Fraction& frac){
+        os << frac.toString() << endl;
+        return os;
+    }
 
 
 }
