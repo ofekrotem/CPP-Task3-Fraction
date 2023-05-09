@@ -2,7 +2,7 @@
 #include <cmath>
 
 using namespace std;
-
+const int PERCISION = 1000; // set precision to 3 decimal places
 namespace ariel 
 {
 class Fraction
@@ -11,45 +11,50 @@ private:
     int numerator;
     int denominator;
 public:
-    Fraction(int num, int den){
-        this->numerator = num;
-        if (den == 0) {
-            __throw_invalid_argument("Denominator can't be zero!");
-        }
+    Fraction(const int num, int den) : numerator(num) {
+    // num: numerator
+    // den: denominator
+    if (den == 0) {
+        __throw_invalid_argument("Denominator can't be zero!");
+    }
         this->denominator = den;
         this->reduce();
     }
-    Fraction(){
-        this->numerator = 0;
-        this->denominator = 1;
+
+
+    Fraction() : numerator(0), denominator(1) {}
+    Fraction(float flo){
+        Fraction result;
+        int gcd = __gcd(static_cast<int>(flo * PERCISION), PERCISION); // calculate greatest common divisor
+        this->numerator = static_cast<int>(flo * PERCISION) / gcd;
+        this->denominator = PERCISION / gcd;
     }
-    Fraction(float f){
-        this->numerator = static_cast<int>(f * 1000);
-        this->denominator = 1000;
-        this->reduce();
-    }
-    int getNumerator () {
+    int getNumerator () const{
         return this->numerator;
     }
-    int getDenominator () {
+    int getDenominator () const{
         return this->denominator;
     }
     void reduce();
+    void checkAddOverflow(Fraction frac) const;
+    void checkSubOverflow(Fraction frac) const;
+    void checkDivOverflow(Fraction frac) const;
+    void checkMulOverflow(Fraction frac) const;
 
     string toString() const{
         return to_string(this->numerator) + "/" + to_string(this->denominator);
     }
     
-    Fraction operator+ (Fraction);
-    Fraction operator- (Fraction); 
-    Fraction operator* (Fraction);
-    Fraction operator/ (Fraction);
-    bool operator== (Fraction);
-    bool operator!= (Fraction);
-    bool operator< (Fraction);
-    bool operator<= (Fraction);
-    bool operator> (Fraction);
-    bool operator>= (Fraction);
+    Fraction operator+ (Fraction) const;
+    Fraction operator- (Fraction) const; 
+    Fraction operator* (Fraction) const;
+    Fraction operator/ (Fraction) const;
+    bool operator== (Fraction) const;
+    bool operator!= (Fraction) const;
+    bool operator< (Fraction) const;
+    bool operator<= (Fraction) const;
+    bool operator> (Fraction) const;
+    bool operator>= (Fraction) const;
 
     friend Fraction operator+ (float,Fraction);
     friend Fraction operator- (float,Fraction); 
@@ -73,13 +78,13 @@ public:
     bool operator> (float);
     bool operator>= (float);
 
-    Fraction operator++ ();
-    Fraction operator++ (int);
-    Fraction operator--();
-    Fraction operator--(int);
+    Fraction operator++ () ;
+    Fraction operator++ (int) ;
+    Fraction operator--() ;
+    Fraction operator--(int) ;
 
-    friend istream& operator>> (istream &is, Fraction &f);
-    friend ostream& operator<< (ostream& os, const Fraction& f);
+    friend istream& operator>> (istream &ist, Fraction &frac);
+    friend ostream& operator<< (ostream& ost, const Fraction& frac);
 };
 
 }
